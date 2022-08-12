@@ -4,11 +4,9 @@ import bodyParser from 'body-parser';
 import { Server } from 'socket.io';
 import http from 'http';
 
-import { connect, NatsConnection } from 'nats';
-
 import dotenv from 'dotenv';
 
-import crypto from 'crypto';
+import NatsWorker from './natsWorker';
 
 dotenv.config();
 
@@ -22,66 +20,13 @@ app.use(
 
 app.use(bodyParser.json());
 
-const natsConnectionObj = {
+export const natsConnectionObj = {
   servers: '',
   user: '',
   pass: '',
 };
 
-let natsEventsToListen: string[] = [];
-
-class NatsWorker {
-  connection!: NatsConnection;
-
-  reconnectionsLimit = 10;
-
-  reconnections = 0;
-
-  async start() {
-    try {
-      this.connection = await connect(natsConnectionObj);
-      console.log('Connected to NATS');
-      io.emit('nats-connected');
-      await this.stablishListeners();
-    } catch (error) {
-      this.reconnections++;
-      if (this.reconnections < this.reconnectionsLimit) {
-        this.start();
-      } else {
-        io.emit('nats-disconnected');
-        console.log("Can't connect to NATS");
-      }
-    }
-  }
-
-  async stablishListeners() {
-    natsEventsToListen.forEach((event) => {
-      console.log('Listening to event: ', event);
-      this.connection.subscribe(event, {
-        callback: (error, msg) => {
-          console.log('Received message on ', event);
-          io.emit('event', {
-            id: crypto.randomUUID(),
-            type: event,
-            msg: msg.data.toString(),
-          });
-        },
-      });
-    });
-  }
-
-  async stop() {
-    if (this.connection) {
-      await this.connection.close();
-    }
-  }
-
-  reset() {
-    this.reconnections = 0;
-    this.stop();
-    this.start();
-  }
-}
+export let natsEventsToListen: string[] = [];
 
 const natsWorker = new NatsWorker();
 
@@ -132,7 +77,7 @@ app.delete('/event/:event', (req, res) => {
 
 const server = http.createServer(app);
 
-const io = new Server(server);
+export const io = new Server(server);
 
 io.on('connection', () => {
   console.log('Client connected');

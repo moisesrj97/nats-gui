@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:4001', { transports: ['websocket'] });
+const backendURl = 'http://localhost:4001';
+
+const socket = io(backendURl, { transports: ['websocket'] });
 
 type Event = {
   id: string;
@@ -59,7 +61,7 @@ function App() {
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    await axios.post('http://localhost:4001/credentials', {
+    await axios.post(`${backendURl}/credentials`, {
       servers: connectionCredentials.servers,
       user: connectionCredentials.user,
       pass: connectionCredentials.pass,
@@ -69,7 +71,7 @@ function App() {
   const handleAddEvent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await axios.post('http://localhost:4001/event', {
+    await axios.post(`${backendURl}/event`, {
       event: newEvent,
     });
 
@@ -77,9 +79,7 @@ function App() {
   };
 
   const handleDeleteEvent = async (event: string) => {
-    await axios.delete(
-      `http://localhost:4001/event/${encodeURIComponent(event)}`
-    );
+    await axios.delete(`${backendURl}/event/${encodeURIComponent(event)}`);
     setEventsToListen((prevEvents) => prevEvents.filter((e) => e !== event));
   };
 

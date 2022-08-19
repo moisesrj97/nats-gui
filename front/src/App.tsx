@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import { CredentialsForm } from './components/CredentialsForm';
 import { NewEventForm } from './components/NewEventForm';
 import { EventsDisplay } from './components/EventsDisplay';
+import CodeEditor from './components/CodeEditor';
 
 export const backendURl = 'http://localhost:4001';
 
@@ -16,7 +17,7 @@ const socket = io(backendURl, { transports: ['websocket'] });
 export type Event = {
   id: string;
   type: string;
-  msg: any;
+  msg: string;
 };
 
 function App() {
@@ -31,12 +32,13 @@ function App() {
 
   useEffect(() => {
     socket.on('connect', () => {
-      console.log('Connected to socket');
+      // eslint-disable-next-line no-console
+      console.log('Connected to Socket');
     });
 
     socket.on('event', (event: Event) => {
-      setEvents((events) => {
-        const newEvents = { ...events };
+      setEvents((oldEvents) => {
+        const newEvents = { ...oldEvents };
         if (!newEvents[event.type]) {
           newEvents[event.type] = [];
         }
@@ -77,7 +79,8 @@ function App() {
           events={events}
           eventsToListen={eventsToListen}
           handleDeleteEvent={handleDeleteEvent}
-        ></EventsDisplay>
+        />
+        <CodeEditor />
       </main>
 
       <Footer />

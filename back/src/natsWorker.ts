@@ -1,6 +1,6 @@
 import { connect, NatsConnection } from 'nats';
-import { io, natsConnectionObj, natsEventsToListen } from '.';
 import crypto from 'crypto';
+import { io, natsConnectionObj, natsEventsToListen } from '.';
 
 export default class NatsWorker {
   connection!: NatsConnection;
@@ -16,7 +16,7 @@ export default class NatsWorker {
       io.emit('nats-connected');
       await this.stablishListeners();
     } catch (error) {
-      this.reconnections++;
+      this.reconnections += 1;
       if (this.reconnections < this.reconnectionsLimit) {
         this.start();
       } else {

@@ -33,6 +33,9 @@ export function EventsDisplay({
               event === selectedEvent ? 'bg-teal-200' : 'bg-teal-100'
             )}
             onClick={() => setSelectedEvent(event)}
+            onKeyDown={() => setSelectedEvent(event)}
+            role='button'
+            tabIndex={0}
           >
             <h4 className={clsx('text-xl cursor-pointer')}>{event}</h4>
             <XCircleIcon

@@ -6,7 +6,8 @@
     "husky": "^8.0.1"
   },
   "scripts": {
-    "dev": "concurrently --kill-others \"cd front && npm run start\" \"cd  back && npm run dev\""
+    "dev": "concurrently --kill-others \"cd front && npm run start\" \"cd  back && npm run dev\"",
+    "lint": "cd front && npm run lint && cd ../back && npm run lint"
   },
   "config": {
     "commitizen": {

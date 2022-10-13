@@ -28,7 +28,7 @@ docker-compose up --build
 ### Roadmap
 
 - Subscribe to messages ✅
-- Publish messages
+- Publish messages ✅
 
 ### License
 

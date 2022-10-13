@@ -8,7 +8,7 @@ import { Footer } from './components/Footer';
 import { CredentialsForm } from './components/CredentialsForm';
 import { NewEventForm } from './components/NewEventForm';
 import { EventsDisplay } from './components/EventsDisplay';
-import CodeEditor from './components/CodeEditor';
+import Sender from './components/Sender';
 
 export const backendURl = 'http://localhost:4001';
 
@@ -26,6 +26,7 @@ function App() {
   }>({});
 
   const [eventsToListen, setEventsToListen] = useState<string[]>([]);
+  const [showCredentialsModal, setShowCredentialsModal] = useState(false);
 
   const [connectionEstablished, setConnectionEstablished] =
     useState<boolean>(false);
@@ -64,23 +65,32 @@ function App() {
 
   return (
     <div className='w-screen min-h-screen flex flex-col p-5 justify-between'>
-      <Header connectionEstablished={connectionEstablished} />
-      <main className='flex-grow'>
-        <div className='flex gap-5 w-full'>
-          <CredentialsForm connectionEstablished={connectionEstablished} />
-          <NewEventForm
-            connectionEstablished={connectionEstablished}
-            eventsToListen={eventsToListen}
-            setEventsToListen={setEventsToListen}
-          />
-        </div>
-
-        <EventsDisplay
-          events={events}
-          eventsToListen={eventsToListen}
-          handleDeleteEvent={handleDeleteEvent}
+      {showCredentialsModal && (
+        <CredentialsForm
+          connectionEstablished={connectionEstablished}
+          setShowCredentialsModal={setShowCredentialsModal}
         />
-        <CodeEditor />
+      )}
+      <Header
+        connectionEstablished={connectionEstablished}
+        setShowCredentialsModal={setShowCredentialsModal}
+      />
+      <main className='flex-grow flex'>
+        <div className='flex-grow flex gap-8 p-10'>
+          <Sender />
+          <div className='flex flex-col gap-5 w-3/5'>
+            <NewEventForm
+              connectionEstablished={connectionEstablished}
+              eventsToListen={eventsToListen}
+              setEventsToListen={setEventsToListen}
+            />
+            <EventsDisplay
+              events={events}
+              eventsToListen={eventsToListen}
+              handleDeleteEvent={handleDeleteEvent}
+            />
+          </div>
+        </div>
       </main>
 
       <Footer />

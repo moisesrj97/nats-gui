@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { StringCodec } from 'nats';
 import { natsConnectionObj, natsEventsToListen, natsWorker } from '.';
 
 const router = Router();
@@ -44,6 +45,19 @@ router.delete('/event/:event', (req, res) => {
   natsEventsToListen.splice(natsEventsToListen.indexOf(event), 1);
 
   natsWorker.reset();
+
+  res.send('OK');
+});
+
+router.post('/emit-event', (req, res) => {
+  const { type, msg } = req.body;
+
+  console.log('Received event to send');
+  console.log({ type, msg });
+
+  console.log('Emitting event to NATS');
+
+  natsWorker.connection.publish(type, StringCodec().encode(msg));
 
   res.send('OK');
 });

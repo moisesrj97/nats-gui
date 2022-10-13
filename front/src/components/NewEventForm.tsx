@@ -28,25 +28,26 @@ export function NewEventForm({
   };
 
   return (
-    <div className='p-10 rounded-md shadow-md w-full'>
+    <div className='rounded-md w-full'>
       <h2 className='text-2xl mb-5'>Events listened</h2>
-      <form onSubmit={handleAddEvent} className='flex flex-col gap-5'>
-        <label htmlFor='addEvent' className='flex flex-col'>
+      <form onSubmit={handleAddEvent} className='flex gap-1'>
+        <label htmlFor='addEvent' className='flex flex-col  sr-only'>
           Add event:
-          <input
-            className='border rounded-md mt-1 mr-5 px-2 py-1'
-            type='text'
-            name='addEvent'
-            id='addEvent'
-            value={newEvent}
-            onChange={(e) => setNewEvent(e.target.value)}
-          />
         </label>
+        <input
+          className='w-full border border-gray-200 rounded-md p-2 outline-teal-500 px-2'
+          type='text'
+          name='addEvent'
+          id='addEvent'
+          placeholder='Add event:'
+          value={newEvent}
+          onChange={(e) => setNewEvent(e.target.value)}
+        />
         <button
           type='submit'
-          className='px-2 py-1 bg-teal-500 text-white rounded-md font-medium text-lg shadow-md hover:bg-teal-600'
+          className='px-2 py-1 bg-teal-500 text-white rounded-md font-medium text-lg hover:bg-teal-600'
         >
-          Añadir evento
+          Add
         </button>
       </form>
     </div>

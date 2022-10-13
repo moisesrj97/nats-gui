@@ -23,7 +23,7 @@ export function EventsDisplay({
   }, [eventsToListen, selectedEvent]);
 
   return (
-    <div>
+    <div className='h-full flex flex-col gap-2'>
       <div className='flex gap-6 mt-8'>
         {eventsToListen.map((event) => (
           <div
@@ -46,11 +46,14 @@ export function EventsDisplay({
         ))}
       </div>
 
-      <div className='w-full p-10'>
-        <ul className='flex flex-col gap-4}'>
+      <div className='relative w-full p-10 flex-grow'>
+        <ul className='flex flex-col gap-4 absolute left-0 right-0 bottom-0 top-0 overflow-auto'>
           {events[selectedEvent] &&
             events[selectedEvent].map((e) => (
-              <li key={e.id} className='p-4 bg-gray-200 rounded-sm'>
+              <li
+                key={e.id}
+                className='p-4 bg-gray-100 hover:bg-gray-200 rounded-sm'
+              >
                 <pre>{JSON.stringify(JSON.parse(e.msg), null, 2)}</pre>
               </li>
             ))}

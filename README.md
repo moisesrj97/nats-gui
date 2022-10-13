@@ -19,6 +19,7 @@ docker-compose up --build
 
 - Connect to nats server
 - Subscribe to a specific subject and receive events
+- Send events to a specific subject
 
 ### Authors
 

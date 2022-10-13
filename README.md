@@ -25,6 +25,11 @@ docker-compose up --build
 
 - @moisesrj97
 
+### Roadmap
+
+- Subscribe to messages ✅
+- Publish messages
+
 ### License
 
 MIT

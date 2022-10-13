@@ -15,7 +15,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
+
       - name: Build and push
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nats-gui:latest .
+          docker buildx build --tag ${{ secrets.DOCKERHUB_USERNAME }}/nats-gui --platform linux/amd64,linux/arm/v7,linux/arm64 .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/nats-gui:latest

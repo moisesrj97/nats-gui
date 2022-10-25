@@ -1,4 +1,6 @@
 {
+  "name": "nats-gui",
+  "version": "1.0.0",
   "devDependencies": {
     "commitizen": "^4.2.5",
     "concurrently": "^7.3.0",

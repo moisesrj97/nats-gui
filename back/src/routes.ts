@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { StringCodec } from 'nats';
-import { natsConnectionObj, natsEventsToListen, natsWorker } from '.';
+import { natsWorker } from '.';
 
 const router = Router();
 
@@ -10,9 +9,7 @@ router.post('/credentials', (req, res) => {
   console.log('Received credentials');
   console.log({ servers, user, pass });
 
-  natsConnectionObj.servers = servers;
-  natsConnectionObj.user = user;
-  natsConnectionObj.pass = pass;
+  natsWorker.setCredentials(servers, user, pass);
 
   natsWorker.reset();
 
@@ -27,7 +24,7 @@ router.post('/event', (req, res) => {
 
   console.log('Adding event to NATS');
 
-  natsEventsToListen.push(event);
+  natsWorker.addEventToListen(event);
 
   natsWorker.reset();
 
@@ -42,7 +39,7 @@ router.delete('/event/:event', (req, res) => {
 
   console.log('Removing event from NATS');
 
-  natsEventsToListen.splice(natsEventsToListen.indexOf(event), 1);
+  natsWorker.removeEventToListen(event);
 
   natsWorker.reset();
 
@@ -57,7 +54,7 @@ router.post('/emit-event', (req, res) => {
 
   console.log('Emitting event to NATS');
 
-  natsWorker.connection.publish(type, StringCodec().encode(msg));
+  natsWorker.emitEvent(type, msg);
 
   res.send('OK');
 });

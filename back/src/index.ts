@@ -12,6 +12,8 @@ import routes from './routes';
 
 dotenv.config();
 
+export const natsWorker = new NatsWorker();
+
 const app = express();
 
 app.use(
@@ -22,16 +24,6 @@ app.use(
 
 app.use(bodyParser.json());
 
-export const natsConnectionObj = {
-  servers: '',
-  user: '',
-  pass: '',
-};
-
-export let natsEventsToListen: string[] = [];
-
-export const natsWorker = new NatsWorker();
-
 app.use(routes);
 
 const server = http.createServer(app);
@@ -40,11 +32,8 @@ export const io = new Server(server);
 
 io.on('connection', () => {
   console.log('Client connected');
-  natsConnectionObj.servers = '';
-  natsConnectionObj.user = '';
-  natsConnectionObj.pass = '';
-  natsEventsToListen = [];
-
+  natsWorker.clearCredentials();
+  natsWorker.clearEventsToListen();
   natsWorker.reset();
 });
 
